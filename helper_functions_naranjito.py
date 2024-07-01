@@ -120,7 +120,7 @@ def make_confusion_matrix_original(y_true, y_pred, classes=None, figsize=(10, 10
 
 def make_confusion_matrix(y_true, y_pred, classes=None, figsize=(10, 10), text_size=10):
   figsize=(5,5)
-  cm=confusion_matrix(y_test, y_pred)
+  cm=confusion_matrix(y_true, y_pred)
   cm_norm=cm.astype("float")/cm.sum(axis=1) [:,np.newaxis]
   n_clasess = cm.shape[0]
 
