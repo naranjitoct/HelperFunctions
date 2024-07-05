@@ -210,11 +210,11 @@ def callbacks_all(dir_name, experiment_name):
   callback_early_stopping = EarlyStopping(monitor='val_loss', patience=3)
   
   
-  tensorboard_callback = tf.keras.callbacks.TensorBoard(
+  callback_tensorboard = tf.keras.callbacks.TensorBoard(
       log_dir=log_dir  )
    
   
-  callbacks=[callback_modelCheckpoint,callback_early_stopping,callback_tensorflow]
+  callbacks=[callback_modelCheckpoint,callback_early_stopping,callback_tensorboard]
   
   return callbacks
 
