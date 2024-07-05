@@ -198,6 +198,7 @@ def create_tensorboard_callback(dir_name, experiment_name):
 
 
 def callbacks_all(dir_name, experiment_name):
+  log_dir = dir_name + "/" + experiment_name + "/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
   print(f"Saving TensorBoard log files to: {log_dir} and models in a h5 file")
   callback_modelCheckpoint = tf.keras.callbacks.ModelCheckpoint(filepath='model_epoch {epoch:02d}_val_accuracy_{val_accuracy:.2f}.h5',
                                                                 monitor='val_accuracy',
@@ -208,7 +209,7 @@ def callbacks_all(dir_name, experiment_name):
   
   callback_early_stopping = EarlyStopping(monitor='val_loss', patience=3)
   
-  log_dir = dir_name + "/" + experiment_name + "/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+  
   tensorboard_callback = tf.keras.callbacks.TensorBoard(
       log_dir=log_dir  )
    
