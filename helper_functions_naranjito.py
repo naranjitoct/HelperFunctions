@@ -195,6 +195,16 @@ def create_tensorboard_callback(dir_name, experiment_name):
   print(f"Saving TensorBoard log files to: {log_dir}")
   return tensorboard_callback
 
+
+def create_model_checking_callback_accuracy():
+  callback_modelCheckpoint = tf.keras.callbacks.ModelCheckpoint(filepath='model_epoch {epoch:02d}_val_accuracy_{val_accuraccy:.2f}.h5',
+                                                              monitor='val_accuracy',
+                                                              save_best_only=True,
+                                                              save_weights_only=False,
+                                                              mode='max',
+                                                              save_freq='epoch',)
+  return callback_modelCheckpoint
+
 # Plot the validation and training data separately
 import matplotlib.pyplot as plt
 
