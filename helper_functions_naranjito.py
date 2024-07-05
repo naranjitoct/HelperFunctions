@@ -176,6 +176,7 @@ def pred_and_plot(model, filename, class_names):
   plt.axis(False);
   
 import datetime
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint,TensorBoard
 
 def create_tensorboard_callback(dir_name, experiment_name):
   """
@@ -196,14 +197,26 @@ def create_tensorboard_callback(dir_name, experiment_name):
   return tensorboard_callback
 
 
-def create_model_checking_callback_accuracy():
-  callback_modelCheckpoint = tf.keras.callbacks.ModelCheckpoint(filepath='model_epoch {epoch:02d}_val_accuracy_{val_accuraccy:.2f}.h5',
-                                                              monitor='val_accuracy',
-                                                              save_best_only=True,
-                                                              save_weights_only=False,
-                                                              mode='max',
-                                                              save_freq='epoch',)
-  return callback_modelCheckpoint
+def callbacks_all(dir_name, experiment_name):
+  print(f"Saving TensorBoard log files to: {log_dir} and models in a h5 file")
+  callback_modelCheckpoint = tf.keras.callbacks.ModelCheckpoint(filepath='model_epoch {epoch:02d}_val_accuracy_{val_accuracy:.2f}.h5',
+                                                                monitor='val_accuracy',
+                                                                save_best_only=True,
+                                                                save_weights_only=False,
+                                                                mode='max',
+                                                                save_freq='epoch',)
+  
+  callback_early_stopping = EarlyStopping(monitor='val_loss', patience=3)
+  
+  log_dir = dir_name + "/" + experiment_name + "/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+  tensorboard_callback = tf.keras.callbacks.TensorBoard(
+      log_dir=log_dir  )
+   
+  
+  callbacks=[callback_modelCheckpoint,callback_early_stopping,callback_tensorflow]
+  
+  return callbacks
+
 
 # Plot the validation and training data separately
 import matplotlib.pyplot as plt
@@ -384,3 +397,30 @@ def view_random_image(target_dir, target_class):
   print (f'Image shape {img.shape}')
   
   return img
+
+
+
+def create_cool_confusion_matrix(model,test_data,class_name):
+                                 
+  import seaborn as sns
+  from sklearn.metrics import confusion_matrix
+
+  # Get true and predicted labels
+  y_true = []
+  y_pred = []
+
+  for images, labels in test_data:
+    y_true.extend(np.argmax(labels, axis=1))
+    predictions = model.predict(images,verbose=0) #No vemos cómo va prediciendo con verbose=0
+    y_pred.extend(np.argmax(predictions, axis=1))
+
+  # Create confusion matrix
+
+  cm = confusion_matrix(y_true, y_pred)
+
+  # Plot confusion matrix
+  sns.heatmap(cm, annot=True, cmap="Blues", fmt="d", xticklabels=class_name, yticklabels=class_name)
+  plt.xlabel("Predicted")
+  plt.ylabel("True")
+  plt.title("Prediction vs Real")
+  plt.show()
