@@ -189,6 +189,7 @@ def create_tensorboard_callback(dir_name, experiment_name):
     dir_name: target directory to store TensorBoard log files
     experiment_name: name of experiment directory (e.g. efficientnet_model_1)
   """
+  model_dir='content/modelCheckpoint'
   log_dir = dir_name + "/" + experiment_name + "/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
   tensorboard_callback = tf.keras.callbacks.TensorBoard(
       log_dir=log_dir
@@ -199,8 +200,10 @@ def create_tensorboard_callback(dir_name, experiment_name):
 
 def callbacks_all(dir_name, experiment_name):
   log_dir = dir_name + "/" + experiment_name + "/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-  print(f"Saving TensorBoard log files to: {log_dir} and models in a h5 file")
-  callback_modelCheckpoint = tf.keras.callbacks.ModelCheckpoint(filepath='model_epoch {epoch:02d}_val_accuracy_{val_accuracy:.2f}.h5',
+  model_dir='content/modelCheckpoint'+ "/" +datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+  
+  print(f"Saving TensorBoard log files to: {log_dir} and models in: {model_dir} ")
+  callback_modelCheckpoint = tf.keras.callbacks.ModelCheckpoint(filepath=model_dir+'/'+'model_epoch {epoch:02d}_val_accuracy_{val_accuracy:.2f}.h5',
                                                                 monitor='val_accuracy',
                                                                 save_best_only=True,
                                                                 save_weights_only=False,
