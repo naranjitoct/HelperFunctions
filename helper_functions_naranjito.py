@@ -203,7 +203,7 @@ def callbacks_all(dir_name, experiment_name):
   model_dir='modelCheckpoint'
   
   print(f"Saving TensorBoard log files to: {log_dir} and models in: {model_dir} ")
-  callback_modelCheckpoint = tf.keras.callbacks.ModelCheckpoint(filepath=model_dir+'/'+'model_epoch {epoch:02d}_val_accuracy_{val_accuracy:.2f}.h5',
+  callback_modelCheckpoint = tf.keras.callbacks.ModelCheckpoint(filepath=model_dir+'/'+'model_epoch {epoch:02d}_val_accuracy_{val_accuracy:.2f}.keras',
                                                                 monitor='val_accuracy',
                                                                 save_best_only=True,
                                                                 save_weights_only=False,
